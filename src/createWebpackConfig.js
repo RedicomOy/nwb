@@ -6,10 +6,8 @@ import CaseSensitivePathsPlugin from 'case-sensitive-paths-webpack-plugin'
 import CopyPlugin from 'copy-webpack-plugin'
 import ExtractTextPlugin from 'extract-text-webpack-plugin'
 import HtmlPlugin from 'html-webpack-plugin'
-import NpmInstallPlugin from 'npm-install-webpack2-plugin' // XXX Temporary
-// $FlowFixMe
-import UglifyJsPlugin from 'uglifyjs-webpack-plugin'
-import webpack, {optimize} from 'webpack'
+import NpmInstallPlugin from 'npm-install-webpack-plugin'
+import webpack from 'webpack'
 import merge from 'webpack-merge'
 
 import createBabelConfig from './createBabelConfig'
@@ -524,9 +522,10 @@ export function createPlugins(
   buildConfig: Object = {},
   userConfig: Object = {}
 ) {
-  let development = process.env.NODE_ENV === 'development'
+  // let development = process.env.NODE_ENV === 'development'
   let production = process.env.NODE_ENV === 'production'
 
+  let optimization = {}
   let plugins = [
     // Enforce case-sensitive import paths
     new CaseSensitivePathsPlugin(),
@@ -536,21 +535,23 @@ export function createPlugins(
       ...buildConfig.define,
       ...userConfig.define,
     }),
+    // XXX Workaround until loaders migrate away from using this.options
+    new webpack.LoaderOptionsPlugin({
+      options: {
+        context: process.cwd()
+      }
+    })
   ]
 
   if (server) {
     // HMR is enabled by default but can be explicitly disabled
     if (server.hot !== false) {
-      plugins.push(
-        new webpack.HotModuleReplacementPlugin(),
-        new webpack.NoEmitOnErrorsPlugin(),
-      )
+      plugins.push(new webpack.HotModuleReplacementPlugin())
+      optimization.noEmitOnErrors = true
     }
     if (buildConfig.status) {
       plugins.push(new StatusPlugin(buildConfig.status))
     }
-    // Use paths as names when serving
-    plugins.push(new webpack.NamedModulesPlugin())
   }
   // If we're not serving, we're creating a static build
   else {
@@ -563,37 +564,36 @@ export function createPlugins(
       }))
     }
 
+    // TODO See what the new optimization.splitChunks defaults do first
     // Move modules imported from node_modules/ into a vendor chunk when enabled
-    if (buildConfig.vendor) {
-      plugins.push(new optimize.CommonsChunkPlugin({
-        name: 'vendor',
-        minChunks(module, count) {
-          return (
-            module.resource &&
-            module.resource.includes('node_modules')
-          )
-        }
-      }))
-    }
+    // if (buildConfig.vendor) {
+    //   plugins.push(new optimize.CommonsChunkPlugin({
+    //     name: 'vendor',
+    //     minChunks(module, count) {
+    //       return (
+    //         module.resource &&
+    //         module.resource.includes('node_modules')
+    //       )
+    //     }
+    //   }))
+    // }
 
     // If we're generating an HTML file, we must be building a web app, so
     // configure deterministic hashing for long-term caching.
     if (buildConfig.html) {
-      plugins.push(
+      if (production) {
         // Generate stable module ids instead of having Webpack assign integers.
-        // NamedModulesPlugin allows for easier debugging and
         // HashedModuleIdsPlugin does this without adding too much to bundle
         // size.
-        (development || userConfig.debug)
-          ? new webpack.NamedModulesPlugin()
-          : new webpack.HashedModuleIdsPlugin(),
-        // The Webpack manifest is normally folded into the last chunk, changing
-        // its hash - prevent this by extracting the manifest into its own
-        // chunk - also essential for deterministic hashing.
-        new optimize.CommonsChunkPlugin({name: 'manifest'}),
-        // Inject the Webpack manifest into the generated HTML as a <script>
-        injectManifestPlugin,
-      )
+        plugins.push(new webpack.HashedModuleIdsPlugin())
+      }
+      // The Webpack manifest is normally folded into the last chunk, changing
+      // its hash - prevent this by extracting the manifest into its own
+      // chunk - also essential for deterministic hashing.
+      optimization.runtimeChunk = true
+      // XXX html-webpack-plugin doesn't work with Wwebpack 4 yet
+      // Inject the Webpack manifest into the generated HTML as a <script>
+      // plugins.push(injectManifestPlugin)
     }
   }
 
@@ -602,24 +602,28 @@ export function createPlugins(
       debug: false,
       minimize: true,
     }))
+    optimization.minimize = userConfig.uglify !== false
     if (userConfig.uglify !== false) {
-      plugins.push(new UglifyJsPlugin(createUglifyConfig(userConfig)))
-    }
-    // Use partial scope hoisting/module concatenation
-    if (userConfig.hoisting) {
-      plugins.push(new optimize.ModuleConcatenationPlugin())
+      optimization.minimizer = [{
+        apply(compiler: any) {
+          // Lazy load the uglifyjs plugin
+          let UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+          new UglifyJsPlugin(createUglifyConfig(userConfig)).apply(compiler)
+        }
+      }]
     }
   }
 
+  // XXX html-webpack-plugin doesn't work with Wwebpack 4 yet
   // Generate an HTML file for web apps which pulls in generated resources
-  if (buildConfig.html) {
-    plugins.push(new HtmlPlugin({
-      chunksSortMode: 'dependency',
-      template: path.join(__dirname, '../templates/webpack-template.html'),
-      ...buildConfig.html,
-      ...userConfig.html,
-    }))
-  }
+  // if (buildConfig.html) {
+  //   plugins.push(new HtmlPlugin({
+  //     chunksSortMode: 'dependency',
+  //     template: path.join(__dirname, '../templates/webpack-template.html'),
+  //     ...buildConfig.html,
+  //     ...userConfig.html,
+  //   }))
+  // }
 
   // Copy static resources
   if (buildConfig.copy) {
@@ -649,7 +653,7 @@ export function createPlugins(
     plugins = plugins.concat(buildConfig.extra)
   }
 
-  return plugins
+  return {optimization, plugins}
 }
 
 function createDefaultPostCSSPlugins(userWebpackConfig) {
@@ -795,6 +799,7 @@ export default function createWebpackConfig(
   buildRulesConfig.babel = {options: createBabelConfig(buildBabelConfig, userConfig.babel, userConfig.path)}
 
   let webpackConfig = {
+    mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
     module: {
       rules: createRules(server, buildRulesConfig, userWebpackConfig, pluginConfig),
       strictExportPresence: true,
@@ -803,10 +808,9 @@ export default function createWebpackConfig(
       ...buildOutputConfig,
       ...userOutputConfig,
     },
-    plugins: createPlugins(server, buildPluginConfig, userWebpackConfig),
-    resolve: merge({
-      extensions: ['.js', '.json'],
-    }, buildResolveConfig, userResolveConfig),
+    // Plugins are configured via a 'plugins' list and 'optimization' config
+    ...createPlugins(server, buildPluginConfig, userWebpackConfig),
+    resolve: merge(buildResolveConfig, userResolveConfig),
     resolveLoader: {
       modules: ['node_modules', path.join(__dirname, '../node_modules')],
     },

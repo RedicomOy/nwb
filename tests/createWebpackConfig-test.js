@@ -23,14 +23,13 @@ describe('createWebpackConfig()', () => {
   context('with only entry config', () => {
     let config = createWebpackConfig({entry: ['index.js']})
     it('creates a default webpack build config', () => {
-      expect(Object.keys(config)).toEqual(['module', 'output', 'plugins', 'resolve', 'resolveLoader', 'entry'])
+      expect(Object.keys(config)).toEqual(['mode', 'module', 'output', 'plugins', 'optimization', 'resolve', 'resolveLoader', 'entry'])
       expect(getLoaders(config.module.rules))
         .toContain('babel-loader')
         .toContain('extract-text-webpack-plugin')
         .toContain('css-loader')
         .toContain('postcss-loader')
         .toContain('url-loader')
-      expect(config.resolve.extensions).toEqual(['.js', '.json'])
     })
     it('excludes node_modules from babel-loader', () => {
       expect(config.module.rules[0].exclude.test('node_modules')).toBe(true)
@@ -62,7 +61,6 @@ describe('createWebpackConfig()', () => {
         .toContain('css-loader')
         .toContain('postcss-loader')
         .toContain('url-loader')
-      expect(config.resolve.extensions).toEqual(['.js', '.json'])
     })
   })
 
