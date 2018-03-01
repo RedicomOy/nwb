@@ -37,7 +37,7 @@ export default class StatusPlugin {
   }
 
   apply(compiler: Object) {
-    compiler.hooks.watchRun.tap('StatusPlugin', this.watchRun)
+    compiler.hooks.watchRun.tapAsync('StatusPlugin', this.watchRun)
     compiler.hooks.done.tap('StatusPlugin', this.done)
   }
 

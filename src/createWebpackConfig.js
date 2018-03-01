@@ -466,26 +466,26 @@ export function createExtraRules(
 }
 
 /**
- * Plugin for HtmlPlugin which inlines content for an extracted Webpack manifest
- * into the HTML in a <script> tag before other emitted asssets are injected by
- * HtmlPlugin itself.
+ * Plugin for HtmlPlugin which inlines the Webpack runtime code and chunk
+ * manifest into the HTML in a <script> tag before other emitted asssets are
+ * injected by HtmlPlugin itself.
  */
-function injectManifestPlugin() {
-  this.plugin('compilation', (compilation) => {
-    compilation.plugin('html-webpack-plugin-before-html-processing', (data, cb) => {
+function inlineRuntimePlugin() {
+  this.hooks.compilation.tap('inlineRuntimePlugin', compilation => {
+    compilation.hooks.htmlWebpackPluginBeforeHtmlProcessing.tapAsync('inlineRuntimePlugin', (data, cb) => {
       Object.keys(compilation.assets).forEach(key => {
-        if (!key.startsWith('manifest.')) return
+        if (!/^runtime\.[a-z\d]+\.js$/.test(key)) return
         let {children} = compilation.assets[key]
         if (children && children[0]) {
           data.html = data.html.replace(
             /^(\s*)<\/body>/m,
             `$1<script>${children[0]._value}</script>\n$1</body>`
           )
-          // Remove the manifest from HtmlPlugin's assets to prevent a <script>
+          // Remove the runtime from HtmlPlugin's assets to prevent a <script>
           // tag being created for it.
-          var manifestIndex = data.assets.js.indexOf(data.assets.publicPath + key)
-          data.assets.js.splice(manifestIndex, 1)
-          delete data.assets.chunks.manifest
+          var runtimeIndex = data.assets.js.indexOf(data.assets.publicPath + key)
+          data.assets.js.splice(runtimeIndex, 1)
+          delete data.assets.chunks.runtime
         }
       })
       cb(null, data)
@@ -577,24 +577,6 @@ export function createPlugins(
     //     }
     //   }))
     // }
-
-    // If we're generating an HTML file, we must be building a web app, so
-    // configure deterministic hashing for long-term caching.
-    if (buildConfig.html) {
-      if (production) {
-        // Generate stable module ids instead of having Webpack assign integers.
-        // HashedModuleIdsPlugin does this without adding too much to bundle
-        // size.
-        plugins.push(new webpack.HashedModuleIdsPlugin())
-      }
-      // The Webpack manifest is normally folded into the last chunk, changing
-      // its hash - prevent this by extracting the manifest into its own
-      // chunk - also essential for deterministic hashing.
-      optimization.runtimeChunk = true
-      // XXX html-webpack-plugin doesn't work with Wwebpack 4 yet
-      // Inject the Webpack manifest into the generated HTML as a <script>
-      // plugins.push(injectManifestPlugin)
-    }
   }
 
   if (production) {
@@ -614,16 +596,19 @@ export function createPlugins(
     }
   }
 
-  // XXX html-webpack-plugin doesn't work with Wwebpack 4 yet
   // Generate an HTML file for web apps which pulls in generated resources
-  // if (buildConfig.html) {
-  //   plugins.push(new HtmlPlugin({
-  //     chunksSortMode: 'dependency',
-  //     template: path.join(__dirname, '../templates/webpack-template.html'),
-  //     ...buildConfig.html,
-  //     ...userConfig.html,
-  //   }))
-  // }
+  if (buildConfig.html) {
+    plugins.push(new HtmlPlugin({
+      chunksSortMode: 'dependency',
+      template: path.join(__dirname, '../templates/webpack-template.html'),
+      ...buildConfig.html,
+      ...userConfig.html,
+    }))
+    // Extract the Webpack runtime and manifest into its own chunk
+    optimization.runtimeChunk = {name: 'runtime'}
+    // Inline the runtime and manifest
+    plugins.push(inlineRuntimePlugin)
+  }
 
   // Copy static resources
   if (buildConfig.copy) {
@@ -807,6 +792,9 @@ export default function createWebpackConfig(
     output: {
       ...buildOutputConfig,
       ...userOutputConfig,
+    },
+    performance: {
+      hints: false
     },
     // Plugins are configured via a 'plugins' list and 'optimization' config
     ...createPlugins(server, buildPluginConfig, userWebpackConfig),
