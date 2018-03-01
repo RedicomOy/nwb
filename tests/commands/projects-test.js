@@ -95,7 +95,9 @@ describe('sample projects', function() {
 
         // Fail if there's any error logging
         server.stderr.on('data', data => {
-          done(new Error(`stderr output received: ${data}`))
+          if (!/DeprecationWarning/.test(data)) {
+            done(new Error(`stderr output received: ${data}`))
+          }
         })
 
         function startHMRClient() {
