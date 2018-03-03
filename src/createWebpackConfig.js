@@ -596,7 +596,8 @@ export function createPlugins(
       ...userConfig.html,
     }))
     // Extract the Webpack runtime and manifest into its own chunk
-    optimization.runtimeChunk = {name: 'runtime'}
+    // The default runtime chunk name is 'runtime' with this configuration
+    optimization.runtimeChunk = 'single'
     // Inline the runtime and manifest
     plugins.push(inlineRuntimePlugin)
   }
