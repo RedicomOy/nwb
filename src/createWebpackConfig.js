@@ -564,19 +564,10 @@ export function createPlugins(
       }))
     }
 
-    // TODO See what the new optimization.splitChunks defaults do first
     // Move modules imported from node_modules/ into a vendor chunk when enabled
-    // if (buildConfig.vendor) {
-    //   plugins.push(new optimize.CommonsChunkPlugin({
-    //     name: 'vendor',
-    //     minChunks(module, count) {
-    //       return (
-    //         module.resource &&
-    //         module.resource.includes('node_modules')
-    //       )
-    //     }
-    //   }))
-    // }
+    if (buildConfig.vendor) {
+      optimization.splitChunks = {chunks: 'all'}
+    }
   }
 
   if (production) {
