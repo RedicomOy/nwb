@@ -26,7 +26,7 @@
     "polyfills.js"
   ],
   "engines": {
-    "node": ">=4.8.0"
+    "node": ">=6.11.5"
   },
   "dependencies": {
     "chalk": "2.3.1",
