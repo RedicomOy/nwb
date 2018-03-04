@@ -1,3 +1,14 @@
 module.exports = {
-  type: 'react-component'
-}
+  type: "react-component",
+  babel: {
+    plugins: [
+      [
+        "import",
+        {
+          libraryName: "antd",
+          style: true
+        }
+      ]
+    ]
+  }
+};
