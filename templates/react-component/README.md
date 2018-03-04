@@ -15,6 +15,3 @@ yarn start
 ```
 
 © 2018 Redicom Oy. All rights reserved.
-
-
-"@redicom/nwb": "{{nwbVersion}}",
