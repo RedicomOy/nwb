@@ -1,45 +1,43 @@
-const path = require("path");
-const createNwbWebpackConfig = require("create-nwb-webpack-config");
+const path = require('path')
+const createNwbWebpackConfig = require('create-nwb-webpack-config')
 
-const webpackConfig = createNwbWebpackConfig();
+const webpackConfig = createNwbWebpackConfig()
 
 webpackConfig.module.rules[0].options.plugins = webpackConfig.module.rules[0].options.plugins.map(
   plugin => {
-    if (plugin[0] === "import") {
-      plugin[1].style = "css";
+    if (plugin[0] === 'import') {
+      plugin[1].style = 'css'
     }
-    return plugin;
+    return plugin
   }
-);
+)
 
 module.exports = {
-  require: [path.resolve(__dirname, "styleguide.setup.js")],
   webpackConfig,
-  title: "@redicom/{{name}}",
+  title: '@redicom/react-component',
+  ignore: ['**/*.test.js', '**/test-config/*.js', '**/src/index.js'],
   sections: [
     {
-      name: "Introduction",
-      content: "docs/introduction.md"
+      name: 'Introduction',
+      content: 'docs/introduction.md',
     },
     {
-      name: "Documentation",
+      name: 'Documentation',
       sections: [
         {
-          name: "Installation",
-          content: "docs/installation.md"
+          name: 'Installation',
+          content: 'docs/installation.md',
         },
         {
-          name: "Configuration",
-          content: "docs/configuration.md"
-        }
-      ]
+          name: 'Configuration',
+          content: 'docs/configuration.md',
+        },
+      ],
     },
     {
-      name: "Components",
-      content: "docs/components.md"
+      name: 'Components',
+      content: 'docs/components.md',
+      components: 'src/**/*.js',
     },
-    {
-      components: "src/module1/*.js"
-    }
-  ]
-};
+  ],
+}

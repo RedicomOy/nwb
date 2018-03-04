@@ -23,10 +23,9 @@
   },
   "peerDependencies": {
     "react": "{{reactPeerVersion}}",
-    "antd": "^3.2.3",
+    "antd": "^3.2.3"
   },
   "devDependencies": {
-    "@redicom/nwb": "{{nwbVersion}}",
     "antd": "^3.2.3",
     "babel-eslint": "^8.2.2",
     "babel-plugin-import": "^1.6.5",
@@ -56,9 +55,9 @@
     "redicom"
   ],
   "jest": {
-    "setupTestFrameworkScriptFile": "<rootDir>/src/test-conf/jest.config.js",
+    "setupTestFrameworkScriptFile": "<rootDir>/src/test-config/jest.config.js",
     "transform": {
-      "^.+\\.js$": "<rootDir>/src/test-conf/jest.transform.js"
+      "^.+\\.js$": "<rootDir>/src/test-config/jest.transform.js"
     }
   }
 }

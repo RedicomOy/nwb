@@ -1,9 +1,10 @@
 // @flow
 import React, { Component } from 'react'
-import { Alert } from 'antd'
 
-class Module1 extends Component<{title}:{title: string}> {
+class Module1 extends Component<{ title: string }> {
   render() {
-    <h1>{title}</h1>
+    return <h1>{this.props.title}</h1>
   }
 }
+
+export default Module1

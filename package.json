@@ -6,14 +6,14 @@
   "license": "MIT",
   "author": "Kalle Pyörälä <kalle.pyorala@redicom.fi>",
   "bin": {
-    "nwb": "./lib/bin/nwb.js"
+    "redinwb": "./lib/bin/nwb.js"
   },
   "scripts": {
     "build":
-      "yarn run flow && yarn run lint && rimraf lib && babel src --out-dir lib --quiet",
+      "yarn run flow && yarn run lint && rimraf lib && babel src --out-dir lib --quiet && chmod +x lib/bin/nwb.js",
     "build:watch": "rimraf lib && babel src --watch --out-dir lib",
     "flow": "flow",
-    "lint": "eslint *.js src tests",
+    "lint": "eslint *.js src",
     "lint:fix": "yarn run lint -- --fix",
     "test": "yarn run build && yarn run test:all",
     "test:coverage":
