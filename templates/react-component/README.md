@@ -1,16 +1,17 @@
-# {{name}}
+# @redicom/{{name}}
 
-[![Travis][build-badge]][build]
-[![npm package][npm-badge]][npm]
-[![Coveralls][coveralls-badge]][coveralls]
+## Usage in other internal project
 
-Describe {{name}} here.
+```
+yarn add @redicom/{{name}}
+```
 
-[build-badge]: https://img.shields.io/travis/user/repo/master.png?style=flat-square
-[build]: https://travis-ci.org/user/repo
+# Development
 
-[npm-badge]: https://img.shields.io/npm/v/npm-package.png?style=flat-square
-[npm]: https://www.npmjs.org/package/npm-package
+Clone project from Gitlab and run:
 
-[coveralls-badge]: https://img.shields.io/coveralls/user/repo/master.png?style=flat-square
-[coveralls]: https://coveralls.io/github/user/repo
+```
+yarn start
+```
+
+© 2018 Redicom Oy. All rights reserved.

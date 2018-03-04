@@ -234,8 +234,8 @@ function createModuleProject(args, projectType, name, targetDir, cb) {
     runSeries([
       (cb) => copyTemplate(templateDir, targetDir, templateVars, cb),
       (cb) => writeConfigFile(targetDir, nwbConfig, cb),
-      (cb) => install(devDependencies, {cwd: targetDir, save: true, dev: true}, cb),
-      (cb) => initGit(args, targetDir, cb),
+      // (cb) => install(devDependencies, {cwd: targetDir, save: true, dev: true}, cb),
+      // (cb) => initGit(args, targetDir, cb),
     ], cb)
   })
 }

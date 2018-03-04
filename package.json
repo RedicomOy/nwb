@@ -1,30 +1,29 @@
 {
-  "name": "nwb",
-  "description": "A toolkit for React, Preact & Inferno apps, React libraries and other npm modules for the web, with no configuration (until you need it)",
+  "name": "@redicom/nwb",
+  "description":
+    "A toolkit for React, Preact & Inferno apps, React libraries and other npm modules for the web, with no configuration (until you need it)",
   "version": "0.21.5",
   "license": "MIT",
-  "author": "Jonny Buchanan <jonathan.buchanan@gmail.com>",
+  "author": "Kalle Pyörälä <kalle.pyorala@redicom.fi>",
   "bin": {
-    "nwb": "./lib/bin/nwb.js"
+    "redinwb": "./lib/bin/nwb.js"
   },
   "scripts": {
-    "build": "npm run flow && npm run lint && rimraf lib && babel src --out-dir lib --quiet",
+    "build":
+      "yarn run flow && yarn run lint && rimraf lib && babel src --out-dir lib --quiet && chmod +x lib/bin/nwb.js",
     "build:watch": "rimraf lib && babel src --watch --out-dir lib",
     "flow": "flow",
-    "lint": "eslint *.js src tests",
-    "lint:fix": "npm run lint -- --fix",
-    "test": "npm run build && npm run test:all",
-    "test:coverage": "npm run build && cross-env NODE_ENV=test NWB_TEST=true nyc mocha tests/*-test.js tests/commands/*-test.js",
-    "test:all": "cross-env NODE_ENV=test NWB_TEST=true mocha --require babel-register tests/*-test.js tests/commands/*-test.js",
-    "test:watch": "cross-env NODE_ENV=test NWB_TEST=true mocha --require babel-register --watch tests/*-test.js"
+    "lint": "eslint *.js src",
+    "lint:fix": "yarn run lint -- --fix",
+    "test": "yarn run build && yarn run test:all",
+    "test:coverage":
+      "yarn run build && cross-env NODE_ENV=test NWB_TEST=true nyc mocha tests/*-test.js tests/commands/*-test.js",
+    "test:all":
+      "cross-env NODE_ENV=test NWB_TEST=true mocha --require babel-register tests/*-test.js tests/commands/*-test.js",
+    "test:watch":
+      "cross-env NODE_ENV=test NWB_TEST=true mocha --require babel-register --watch tests/*-test.js"
   },
-  "files": [
-    "docs",
-    "lib",
-    "templates",
-    "express.js",
-    "polyfills.js"
-  ],
+  "files": ["docs", "lib", "templates", "express.js", "polyfills.js"],
   "engines": {
     "node": ">=4.8.0"
   },
@@ -127,48 +126,41 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/insin/nwb.git"
+    "url": "https://github.com/RedicomOy/nwb.git"
   },
-  "keywords": [
-    "development",
-    "inferno",
-    "preact",
-    "react",
-    "tooling"
-  ],
+  "keywords": ["development", "inferno", "preact", "react", "tooling"],
   "babel": {
     "presets": [
       "flow",
-      ["env", {
-        "loose": true,
-        "targets": {
-          "node": 4
+      [
+        "env",
+        {
+          "loose": true,
+          "targets": {
+            "node": 4
+          }
         }
-      }],
+      ],
       "stage-2"
     ],
-    "plugins": [
-      "add-module-exports"
-    ],
+    "plugins": ["add-module-exports"],
     "env": {
       "test": {
         "plugins": [
-          ["istanbul", {
-            "include": "src"
-          }]
+          [
+            "istanbul",
+            {
+              "include": "src"
+            }
+          ]
         ]
       }
     }
   },
   "nyc": {
     "instrument": false,
-    "reporter": [
-      "lcov",
-      "text-summary"
-    ],
-    "require": [
-      "babel-core/register"
-    ],
+    "reporter": ["lcov", "text-summary"],
+    "require": ["babel-core/register"],
     "sourceMap": false
   }
 }
