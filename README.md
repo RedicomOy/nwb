@@ -7,13 +7,14 @@
 
 ![nwb](resources/cover.jpg)
 
-Redicom Fork modifications:
+## Redicom Fork modifications:
 
-- react-component uses Styleguidist, Jest and Enzyme
-- web-module uses Jest
+### react-component 
+- uses Prettier, Flow, Styleguidist, Jest, Enzyme and Yarn
+- babel-plugin-import for Ant-Design
+- Redicom eslint config
 
-
-nwb is a toolkit for:
+## nwb is a toolkit for:
 
 - [Quick Development with React, Inferno, Preact or vanilla JavaScript](#quick-development)
 - Developing:
