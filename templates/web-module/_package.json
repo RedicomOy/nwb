@@ -1,27 +1,44 @@
 {
-  "name": "{{name}}",
+  "name": "@redicom/{{name}}",
   "version": "1.0.0",
-  "description": "Describe {{name}} here",
+  "description": "Describe @redicom/{{name}} here",
   "main": "lib/index.js",{{esModulesPackageConfig}}
   "files": [
     "es",
-    "lib",
-    "umd"
+    "lib"
   ],
   "scripts": {
     "build": "nwb build-web-module",
     "clean": "nwb clean-module",
-    "test": "nwb test",
-    "test:coverage": "nwb test --coverage",
-    "test:watch": "nwb test --server"
+    "test": "jest",
+    "test:coverage": "jest --coverage",
+    "test:watch": "jest --watch",
+    "flow": "flow",
+    "lint": "eslint src"
   },
   "dependencies": {
   },
   "devDependencies": {
-    "nwb": "{{nwbVersion}}"
+    "babel-eslint": "^8.2.2",
+    "babel-plugin-import": "^1.6.5",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "eslint": "^4.18.1",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-flowtype": "^2.46.1",
+    "eslint-plugin-import": "^2.9.0",
+    "eslint-plugin-jest": "^21.12.2",
+    "flow-bin": "^0.66.0",
+    "jest": "^22.4.2",
+    "moxios": "^0.4.0"
   },
-  "author": "",
-  "homepage": "",
-  "license": "MIT",
-  "repository": ""
+  "author": "Change This <change.this@redicom.fi>",
+  "homepage": "https://www.redicom.fi",
+  "license": "UNLICENSED",
+  "repository": "git://gitlab.redicom.fi/group/project.git",
+  "jest": {
+    "transform": {
+      "^.+\\.js$": "<rootDir>/test-config/jest.transform.js"
+    }
+  }
 }

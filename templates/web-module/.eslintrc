@@ -1,0 +1,41 @@
+{
+  "parser": "babel-eslint",
+  "extends": [
+    "eslint:recommended",
+    "plugin:jest/recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:flowtype/recommended",
+    "prettier",
+    "prettier/flowtype"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module"
+  },
+  "rules": {
+    "sort-keys": [
+      "warn",
+      "asc",
+      {
+        "caseSensitive": false,
+        "natural": false
+      }
+    ],
+    "import/order": [
+      "error",
+      {
+        "newlines-between": "always"
+      }
+    ],
+    "import/newline-after-import": ["error"]
+  },
+  "settings": {
+    "propWrapperFunctions": ["forbidExtraProps"]
+  },
+  "plugins": ["flowtype"],
+  "env": {
+    "browser": true,
+    "node": true
+  }
+}

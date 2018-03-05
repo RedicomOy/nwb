@@ -9,21 +9,27 @@
 
 ## Redicom Fork modifications:
 
-### react-component 
-- uses Prettier, Flow, Styleguidist, Jest, Enzyme and Yarn
-- babel-plugin-import for Ant-Design
-- Redicom eslint config
+### react-component
+
+* uses Prettier, Flow, Styleguidist, Jest, Enzyme and Yarn
+* babel-plugin-import for Ant-Design
+* Redicom eslint config
+
+### web-module
+
+* uses Prettier, Flow, Jest and Yarn
+* Redicom eslint config
 
 ## nwb is a toolkit for:
 
-- [Quick Development with React, Inferno, Preact or vanilla JavaScript](#quick-development)
-- Developing:
-  - [React Apps](#react-apps)
-  - [Preact Apps](#preact-apps)
-  - [Inferno Apps](#inferno-apps)
-  - [Vanilla JavaScript Apps](#vanilla-javascript-apps)
-  - [React Components and Libraries](#react-components-and-libraries)
-  - [npm Modules for the Web](#npm-modules-for-the-web)
+* [Quick Development with React, Inferno, Preact or vanilla JavaScript](#quick-development)
+* Developing:
+  * [React Apps](#react-apps)
+  * [Preact Apps](#preact-apps)
+  * [Inferno Apps](#inferno-apps)
+  * [Vanilla JavaScript Apps](#vanilla-javascript-apps)
+  * [React Components and Libraries](#react-components-and-libraries)
+  * [npm Modules for the Web](#npm-modules-for-the-web)
 
 A zero-config development setup is provided, but nwb also supports [configuration](/docs/Configuration.md#configuration) and [plugin modules](/docs/Plugins.md#plugins) which add extra functionality (e.g. [Sass](http://sass-lang.com/) support), should you need them
 
@@ -46,6 +52,7 @@ To use nwb's tooling in a project, install it as a `devDependency` and use `nwb`
 ```sh
 npm install --save-dev nwb
 ```
+
 ```json
 {
   "scripts": {
@@ -60,14 +67,15 @@ npm install --save-dev nwb
 For quick development with [React](https://facebook.github.io/react/), [Inferno](https://infernojs.org/), [Preact](https://preactjs.com/) or vanilla JavaScript, use the `nwb react`, `nwb inferno`, `nwb preact` or `nwb web`commands.
 
 ```js
-import React, {Component} from 'react'
+import React, { Component } from "react";
 
 export default class App extends Component {
   render() {
-    return <h1>Hello world!</h1>
+    return <h1>Hello world!</h1>;
   }
 }
 ```
+
 ```sh
 $ nwb react run app.js
 ✔ Installing react and react-dom
@@ -76,6 +84,7 @@ Compiled successfully in 5033 ms.
 
 The app is running at http://localhost:3000/
 ```
+
 ```sh
 $ nwb react build app.js
 ✔ Building React app
@@ -153,29 +162,29 @@ cd my-module/
 
 ## [Guides](/docs/guides/#table-of-contents)
 
-- [Quick Development with nwb](/docs/guides/QuickDevelopment.md#quick-development-with-nwb)
-- [Developing React Apps with nwb](/docs/guides/ReactApps.md#developing-react-apps-with-nwb)
-- [Developing React Components and Libraries with nwb](/docs/guides/ReactComponents.md#developing-react-components-and-libraries-with-nwb)
+* [Quick Development with nwb](/docs/guides/QuickDevelopment.md#quick-development-with-nwb)
+* [Developing React Apps with nwb](/docs/guides/ReactApps.md#developing-react-apps-with-nwb)
+* [Developing React Components and Libraries with nwb](/docs/guides/ReactComponents.md#developing-react-components-and-libraries-with-nwb)
 
 ## [Documentation](/docs/#table-of-contents)
 
-- [Features](/docs/Features.md#features)
-- [Commands](/docs/Commands.md#commands)
-  - [`nwb`](/docs/Commands.md#nwb)
-  - [`nwb react`, `nwb inferno`, `nwb preact` and `nwb web`](docs/guides/QuickDevelopment.md#quick-development-with-nwb)
-- [Configuration](/docs/Configuration.md#configuration)
-  - [Configuration File](/docs/Configuration.md#configuration-file)
-  - [Configuration Object](/docs/Configuration.md#configuration-object)
-    - [Babel Configuration](/docs/Configuration.md#babel-configuration)
-    - [Webpack Configuration](/docs/Configuration.md#webpack-configuration)
-    - [Karma Configuration](/docs/Configuration.md#karma-configuration)
-    - [npm Build Configuration](/docs/Configuration.md#npm-build-configuration)
-- [Testing](/docs/Testing.md#testing)
-- [Plugins](/docs/Plugins.md#plugins)
-- [Middleware](/docs/Middleware.md#middleware)
-- [Examples](/docs/Examples.md#examples)
-- [Frequently Asked Questions](/docs/FAQ.md#frequently-asked-questions)
-- [Versioning](/docs/Versioning.md#versioning)
+* [Features](/docs/Features.md#features)
+* [Commands](/docs/Commands.md#commands)
+  * [`nwb`](/docs/Commands.md#nwb)
+  * [`nwb react`, `nwb inferno`, `nwb preact` and `nwb web`](docs/guides/QuickDevelopment.md#quick-development-with-nwb)
+* [Configuration](/docs/Configuration.md#configuration)
+  * [Configuration File](/docs/Configuration.md#configuration-file)
+  * [Configuration Object](/docs/Configuration.md#configuration-object)
+    * [Babel Configuration](/docs/Configuration.md#babel-configuration)
+    * [Webpack Configuration](/docs/Configuration.md#webpack-configuration)
+    * [Karma Configuration](/docs/Configuration.md#karma-configuration)
+    * [npm Build Configuration](/docs/Configuration.md#npm-build-configuration)
+* [Testing](/docs/Testing.md#testing)
+* [Plugins](/docs/Plugins.md#plugins)
+* [Middleware](/docs/Middleware.md#middleware)
+* [Examples](/docs/Examples.md#examples)
+* [Frequently Asked Questions](/docs/FAQ.md#frequently-asked-questions)
+* [Versioning](/docs/Versioning.md#versioning)
 
 ## Why use nwb?
 
@@ -189,18 +198,15 @@ cd my-module/
 
 ## MIT Licensed
 
-*Cover image created by [GeorgioWan](https://github.com/GeorgioWan)*
+_Cover image created by [GeorgioWan](https://github.com/GeorgioWan)_
 
-*Operating system icons created with [Icons8](https://icons8.com/)*
+_Operating system icons created with [Icons8](https://icons8.com/)_
 
 [travis-badge]: https://img.shields.io/travis/insin/nwb/master.png?style=flat-square
 [travis]: https://travis-ci.org/insin/nwb
-
 [appveyor-badge]: https://img.shields.io/appveyor/ci/insin/nwb/master.png?style=flat-square
 [appveyor]: https://ci.appveyor.com/project/insin/nwb
-
 [npm-badge]: https://img.shields.io/npm/v/nwb.png?style=flat-square
 [npm]: https://www.npmjs.org/package/nwb
-
 [coveralls-badge]: https://img.shields.io/coveralls/insin/nwb/master.png?style=flat-square
 [coveralls]: https://coveralls.io/github/insin/nwb
